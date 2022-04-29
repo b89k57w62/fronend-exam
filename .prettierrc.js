@@ -1,7 +1,7 @@
 module.exports = {
-  arrowParens: 'avoid',
+  arrowParens: "avoid",
   semi: false,
-};
+}
 
 // {
 //   "arrowParens": "always",
