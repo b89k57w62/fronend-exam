@@ -27,6 +27,23 @@ Home 页面为博客系统的列表页, 需要展示所有的博客文章，后�
 
 `List` , `Tag`
 
+列表页需要有创建\删除功能
+
+`POST /api/posts` 创建 POST
+```json
+{
+  "title": "标题",
+  "summary": "概览",
+  "date": "编写时间",
+  "content": "文章主体内容",
+  "author": "作者",
+  "tags": "标签",
+  "category": "分类" // 分类需要从 GET /api/categories 中进行选择
+}
+```
+
+`DELETE /api/posts/:id` 删除具体的 POST
+
 ### Post 详情页面 `pages/Post`
 
 Post 页面需要展示 Post 的详情页，需要展示后端返回所有的数据
@@ -35,7 +52,7 @@ Post 页面需要展示 Post 的详情页，需要展示后端返回所有的数
 
 后端 endpoint 如下
 
-`/api/profile` : 返回用户信息
+`GET /api/profile` : 返回用户信息
 
 ```json
 {
@@ -44,13 +61,13 @@ Post 页面需要展示 Post 的详情页，需要展示后端返回所有的数
 }
 ```
 
-`/api/categories` : 返回所有的分类
+`GET /api/categories` : 返回所有的分类
 
 ```json
 string[]
 ```
 
-/api/posts: 返回所有的文章
+GET /api/posts: 返回所有的文章
 
 ```json
 [
@@ -90,7 +107,7 @@ string[]
 使用 field 来直接进行筛选
 例如，我要筛选出 author 为 Arias 文章，则可使用 `author=Arias`
 
-`/api/posts/:id` : 返回具体文章的内容
+`GET /api/posts/:id` : 返回具体文章的内容
 
 ```json
 {
