@@ -22,7 +22,7 @@ export const fetchPostById = async (id: number): Promise<Post> => {
   return response.json()
 }
 
-export const createPost = async (post: Omit<Post, id>): Promise<Post> => {
+export const createPost = async (post: Omit<Post, "id">): Promise<Post> => {
   const response = await fetch(`${API_BASE}/posts`, {
     method: "POST",
     headers: {
