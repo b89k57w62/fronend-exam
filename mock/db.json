@@ -3,7 +3,12 @@
     "name": "Exam User",
     "email": "exam.user@hkmci.com"
   },
-  "categories": ["无聊文章", "技术", "人文", "科技"],
+  "categories": [
+    "无聊文章",
+    "技术",
+    "人文",
+    "科技"
+  ],
   "posts": [
     {
       "id": 1,
