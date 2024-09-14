@@ -12,7 +12,7 @@ export const fetchPosts = async (
     )
   }
   const response = await fetch(url.toString())
-  const total = Number(response.headers.get("Total-Count")) || 0
+  const total = Number(response.headers.get("X-Total-Count")) || 0
   const data = await response.json()
   return { data, total }
 }

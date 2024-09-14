@@ -33,29 +33,21 @@ const Home: React.FC = () => {
 
   const loadPosts = async (page: number) => {
     setLoading(true)
-    try {
-      const { data, total: totalCount } = await fetchPosts({
-        _page: page,
-        _limit: 10,
-        _sort: "date",
-        _order: "desc",
-      })
-      setPosts(data)
-      setTotal(totalCount)
-    } catch (error) {
-      message.error("loading posts fail")
-    } finally {
-      setLoading(false)
-    }
+    const { data, total: totalCount } = await fetchPosts({
+      _page: page,
+      _limit: 10,
+      _sort: "date",
+      _order: "desc",
+    })
+    setPosts(data)
+    setTotal(totalCount)
+
+    setLoading(false)
   }
 
   const loadCategories = async () => {
-    try {
-      const data = await fetchCategories()
-      setCategories(data)
-    } catch (error) {
-      message.error("loading catecories fail")
-    }
+    const data = await fetchCategories()
+    setCategories(data)
   }
 
   const showModal = () => {
@@ -63,20 +55,16 @@ const Home: React.FC = () => {
   }
 
   const handlePosted = async () => {
-    try {
-      const values = await form.validateFields()
-      await createPost({
-        ...values,
-        date: new Date().toISOString(),
-        author: "TEST",
-      })
-      message.success("Posted")
-      setIsModalVisible(false)
-      form.resetFields()
-      loadPosts(currentPage)
-    } catch (error) {
-      message.error("Post fail")
-    }
+    const values = await form.validateFields()
+    await createPost({
+      ...values,
+      date: new Date().toISOString(),
+      author: "TEST",
+    })
+    message.success("Posted")
+    setIsModalVisible(false)
+    form.resetFields()
+    loadPosts(currentPage)
   }
 
   const handleCancel = () => {
@@ -85,13 +73,9 @@ const Home: React.FC = () => {
   }
 
   const handleDelete = async (id: number) => {
-    try {
-      await deletePost(id)
-      message.success("Deleted Post")
-      loadPosts(currentPage)
-    } catch (error) {
-      message.error("Delete Post fail")
-    }
+    await deletePost(id)
+    message.success("Deleted Post")
+    loadPosts(currentPage)
   }
 
   const handlePageChange = (page: number) => {
@@ -119,7 +103,7 @@ const Home: React.FC = () => {
             actions={[
               <Button
                 key={`delete-${item.id}`}
-                type="link"
+                type="dashed"
                 onClick={() => handleDelete(item.id)}
               >
                 Delete
