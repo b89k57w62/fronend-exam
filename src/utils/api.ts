@@ -18,7 +18,6 @@ export const fetchPosts = async (
 }
 
 export const fetchPostById = async (id: number): Promise<Post> => {
-  console.log("Sending request to API for post ID:", id)
   const response = await fetch(`${API_BASE}/posts/${id}`)
   return response.json()
 }

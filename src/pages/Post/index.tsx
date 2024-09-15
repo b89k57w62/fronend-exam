@@ -10,16 +10,12 @@ const Post: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const [post, setPost] = useState<PostType | null>(null)
 
-  console.log("Post component is rendering, Post ID:", id)
-  console.log(123123)
   useEffect(() => {
-    console.log("Post ID:", id)
     loadPost()
   }, [id])
 
   const loadPost = async () => {
     const data = await fetchPostById(Number(id))
-    console.log("Fetched Data:", data)
     setPost(data)
   }
 
