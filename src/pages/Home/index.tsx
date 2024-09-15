@@ -111,7 +111,7 @@ const Home: React.FC = () => {
             ]}
           >
             <List.Item.Meta
-              title={<Link to={`/post/${item.id}`}>{item.title}</Link>}
+              title={<Link to={`/posts/${item.id}`}>{item.title}</Link>}
               description={`Author: ${item.author} | Date: ${new Date(
                 item.date
               ).toLocaleDateString()}`}
