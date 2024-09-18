@@ -20,29 +20,29 @@ const { Option } = Select
 const Home: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
   const [form] = Form.useForm()
   const [total, setTotal] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState<number>(1)
+  const [sortField, setSortField] = useState<string>("date")
+  const [sortOrder, setSortOrder] = useState<string>("desc")
+  const [filterAuthor, setFilterAuthor] = useState<string>("")
 
   useEffect(() => {
-    loadPosts(currentPage)
+    loadPosts()
     loadCategories()
-  }, [currentPage])
+  }, [currentPage, sortField, sortOrder, filterAuthor])
 
-  const loadPosts = async (page: number) => {
-    setLoading(true)
+  const loadPosts = async () => {
     const { data, total: totalCount } = await fetchPosts({
-      _page: page,
+      _page: currentPage,
       _limit: 10,
-      _sort: "date",
-      _order: "desc",
+      _sort: sortField,
+      _order: sortOrder,
+      ...(filterAuthor && { author: filterAuthor }),
     })
     setPosts(data)
     setTotal(totalCount)
-
-    setLoading(false)
   }
 
   const loadCategories = async () => {
@@ -64,7 +64,7 @@ const Home: React.FC = () => {
     message.success("Posted")
     setIsModalVisible(false)
     form.resetFields()
-    loadPosts(currentPage)
+    loadPosts()
   }
 
   const handleCancel = () => {
@@ -75,11 +75,25 @@ const Home: React.FC = () => {
   const handleDelete = async (id: number) => {
     await deletePost(id)
     message.success("Deleted Post")
-    loadPosts(currentPage)
+    loadPosts()
   }
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
+  }
+
+  const handleSortChange = (field: string) => {
+    if (field == sortField) {
+      setSortOrder(sortOrder == "asc" ? "desc" : "asc")
+    } else {
+      setSortField(field)
+      setSortOrder("asc")
+    }
+  }
+
+  const handleFilterChange = (value: string) => {
+    setFilterAuthor(value)
+    setCurrentPage(1)
   }
 
   return (
@@ -92,8 +106,17 @@ const Home: React.FC = () => {
       >
         Create Post
       </Button>
+
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Filter by author"
+          onChange={e => handleFilterChange(e.target.value)}
+          style={{ width: 200, marginRight: 16 }}
+        />
+        <Button onClick={() => handleSortChange("date")}>Sort by date</Button>
+      </div>
+
       <List
-        loading={loading}
         itemLayout="vertical"
         size="large"
         dataSource={posts}
@@ -112,9 +135,19 @@ const Home: React.FC = () => {
           >
             <List.Item.Meta
               title={<Link to={`/posts/${item.id}`}>{item.title}</Link>}
-              description={`Author: ${item.author} | Date: ${new Date(
-                item.date
-              ).toLocaleDateString()}`}
+              description={
+                <>
+                  <span
+                    onKeyPress={() => handleSortChange("author")}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    Author: {item.author}
+                  </span>
+                  <br />
+                  <span>Date: {new Date(item.date).toLocaleDateString()}</span>
+                </>
+              }
             />
             <div>
               {item.summary}
